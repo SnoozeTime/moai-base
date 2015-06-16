@@ -12,6 +12,8 @@ function init()
    --Open a window (title, width, height) - Sim for simulation: reference to coordinate system                       
    MOAISim.openWindow("Moai base", SCREEN_WIDTH, SCREEN_HEIGHT)
 end
+
+
 -- ==================================
 -- Game loop
 -- ==================================

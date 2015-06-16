@@ -19,7 +19,7 @@ function BaseState:initialize()
    print("Initialize state")
    
    --Input 
-   MOAIInputMgr.device.keyboard:setKeyCallback ( onKeyboardKeyEvent )
+   MOAIInputMgr.device.keyboard:setKeyCallback ( BaseState.onKeyboardKeyEvent )
 
    -- Set the viewport and the layer for rendering                                                                   
    viewport = MOAIViewport.new()
@@ -31,32 +31,15 @@ function BaseState:initialize()
    --===============================                                                                                 
    -- Add a lobster                                                                                                  
    --================================                                                                                
-   --create a new GfxQuad to hold texture                                                                            
-   lobsterGfx = MOAIGfxQuad2D.new()
-   lobsterGfx:setTexture("openlobster.png")
-   --set the size of the quad                                                                                        
-   lobsterGfx:setRect(-128, -128, 128, 128)
-
-   --Create a new prop                                                                                               
-   base = MOAIProp2D.new()
-   base:setDeck(lobsterGfx)
-   -- Coordinates simulation style. 0,0 is center of the screen and y increases with height                          
-   baseX = 0
-   baseY = -240
-   base:setLoc(baseX, baseY)
+   base = Hero:new()
 
    --Insert the prop into the layer so it can be seen                                                                
-   layer:insertProp(base)
+   layer:insertProp(base.prop)
    
    self.frames = 0
    self.layers = {}  
    table.insert(self.layers, layer)
-   
-   -- Some properties for our lobster
-    base.upDown = false
-    base.leftDown = false
-    base.downDown = false
-    base.rightDown = false
+
 end
 
 function BaseState:getLayers()
@@ -78,7 +61,7 @@ for name, value in pairs ( MOAIKeyCode ) do
 	end
 end
 
-function onKeyboardKeyEvent ( key, down )
+function BaseState.onKeyboardKeyEvent ( key, down )
 	local keyInfo = keyNames [ key ] or tostring ( key )
   if keyInfo == "Z" then
     base.upDown = down
@@ -96,13 +79,8 @@ end
 
 
 function BaseState:update()
-   self.frames = self.frames + 1
-   if self.frames > 180 then
-      print("Update state " .. self.frames)
-      self.frames = 0
-   end
    
-   local x, y = base:getLoc()
+   local x, y = base.prop:getLoc()
     if base.upDown == true then
       y = y + 10
     end
@@ -115,7 +93,7 @@ function BaseState:update()
     if base.leftDown == true then
       x = x - 10
     end
-    base:setLoc(x, y)
+    base.prop:setLoc(x, y)
     
     
 end
