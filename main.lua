@@ -5,12 +5,12 @@ local BaseState = require("gamestates.templateState")
 -- ==================================
 --    Window
 -- ==================================
---=====================================                                                                           
--- setup moai                                                                                                     
---=====================================                                                                           
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+                                                                        
 function init()
    --Open a window (title, width, height) - Sim for simulation: reference to coordinate system                       
-   MOAISim.openWindow("Rocket Lobster", 320, 480)
+   MOAISim.openWindow("Moai base", SCREEN_WIDTH, SCREEN_HEIGHT)
 end
 -- ==================================
 -- Game loop
@@ -21,12 +21,9 @@ function mainFunction()
    stateMgr.pushState( BaseState:new() )   
    while true do
       coroutine.yield()
-   
       
       stateMgr.update()
-   
-   
-  
+
    end
 end
 
