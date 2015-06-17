@@ -106,7 +106,7 @@ function Map:display()
   local prop = MOAIProp2D.new()
   prop:setDeck(mapTiles)
   prop:setGrid(grid)
-  prop:setLoc(-400, -600)
+  prop:setLoc(-400, - ( self.tileny * self.tileheight - 300))
   
   -- Miiiiine
   self.grid = grid
