@@ -1,6 +1,7 @@
 
 --Template class for a gamestate
 local Hero = require("../entities/templateEntity")
+local Map = require("../modules/Map")
 
 BaseState = {}
 
@@ -27,7 +28,16 @@ function BaseState:initialize()
    viewport:setSize(800,600)
 
    layer = MOAILayer2D.new()
-   layer:setViewport(viewport)                                                                                    
+   layer:setViewport(viewport)         
+   
+   --===============================
+   -- Add a map
+   --================================
+   map = Map:new()
+   map:importMap("../assets/maps/map2")
+   
+   layer:insertProp(map.prop)
+   
    --===============================                                                                                 
    -- Add a lobster                                                                                                  
    --================================                                                                                
