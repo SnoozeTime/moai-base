@@ -1,4 +1,7 @@
 -- Parse a lua file coming from tile and use it to display a tiled map
+-- Tiled can add properties to its tiles. let's begin by collision
+-- 
+
 
 require("modules/utils")
 
@@ -8,6 +11,8 @@ function Map:new ( mapname )
   o = {}
   setmetatable(o, self)
   self.__index = self
+  
+  self:importMap(mapname)
   
   return o
 end
@@ -32,7 +37,16 @@ function Map:importMap( mapname )
   for i = 1, self.tileset.tilecount do
     local tile = {}
     tile.id = i
+    
     tile.properties = {}
+    
+    for _, v in ipairs(self.tileset.tiles) do
+      if v.id == i then
+        tile.properties = v.properties
+      end     
+    end
+    
+
     table.insert(self.tiles, tile)
   end
   
@@ -64,12 +78,9 @@ end
 local function getHexRow( row )
  
   local hexarow = {}
-  
 
-  
   for _, el in ipairs(row) do
- --   print("Decimal " .. el.id  .. "   Hexa " .. tonumber(el.id,16))
-    table.insert(hexarow, tonumber(Utils.num2hex(el.id), 16)) --tonumber(string.format("0x%X", el.id)))
+    table.insert(hexarow, tonumber(Utils.num2hex(el.id), 16))
   end
   
   return unpack(hexarow)
@@ -87,11 +98,7 @@ function Map:display()
   local grid = MOAIGrid.new()
   grid:initRectGrid(self.tilenx, self.tileny, self.tilewidth, self.tileheight)
   
-  --grid:setRow(3, 0x01, 0x01, 0x02)
-  --grid:setRow(2, 0x02, 0x03, 0x01)
-  --grid:setRow(1, 0x03, 0x01, 0x03)
   for y = 1, self.tileny do
-    print(getHexRow(self.data[y]))
     grid:setRow(self.tileny - (y - 1), getHexRow(self.data[y]))
   end
  
@@ -113,6 +120,45 @@ function Map:display()
   self.mapTiles = mapTiles
   self.prop = prop
   
+end
+
+function Map:drawDebug()
+  
+  -- Red rectangle if properties table contains collide
+  local function getDebugRow(row)
+    local debugRow = {}
+    
+    for _, el in ipairs(row) do
+      if el.properties["collide"] ~= nil then
+        table.insert(debugRow, 1)
+      else
+        table.insert(debugRow, 2)
+      end
+    end
+    
+    return unpack(debugRow)
+  end
+  
+  -------------------------------------------------------------------------------
+  
+  local collideGrid = MOAIGrid.new()
+  collideGrid:initRectGrid(self.tilenx, self.tileny, self.tilewidth, self.tileheight)
+  for y = 1, self.tileny do
+    print(getDebugRow(self.data[y]))
+    collideGrid:setRow(self.tileny - (y - 1), getDebugRow(self.data[y]))
+  end
+  
+  local mapTiles = MOAITileDeck2D.new()
+  mapTiles:setTexture("debug.png")
+  mapTiles:setSize(2,1)
+  
+  local prop = MOAIProp2D.new()
+  prop:setDeck(mapTiles)
+  prop:setGrid(collideGrid)
+  prop:setLoc(-400, - ( self.tileny * self.tileheight - 300))
+  
+  return prop
+
 end
 
 

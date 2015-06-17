@@ -33,11 +33,10 @@ function BaseState:initialize()
    --===============================
    -- Add a map
    --================================
-   map = Map:new()
-   map:importMap("assets/maps/map3")
+   map = Map:new("assets/maps/map3")
    
    layer:insertProp(map.prop)
-   
+   layer:insertProp(map:drawDebug())
    --===============================                                                                                 
    -- Add a lobster                                                                                                  
    --================================                                                                                
