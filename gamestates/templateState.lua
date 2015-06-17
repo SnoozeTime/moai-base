@@ -34,7 +34,7 @@ function BaseState:initialize()
    -- Add a map
    --================================
    map = Map:new()
-   map:importMap("../assets/maps/map2")
+   map:importMap("assets/maps/map3")
    
    layer:insertProp(map.prop)
    

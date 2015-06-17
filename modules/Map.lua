@@ -1,5 +1,7 @@
 -- Parse a lua file coming from tile and use it to display a tiled map
 
+require("modules/utils")
+
 Map = {}
 
 function Map:new ( mapname )
@@ -35,6 +37,7 @@ function Map:importMap( mapname )
   end
   
   self.data = {}
+  
   --Now the grid
   local maplayer = mapfile.layers[1]
   
@@ -62,9 +65,11 @@ local function getHexRow( row )
  
   local hexarow = {}
   
+
+  
   for _, el in ipairs(row) do
-    
-    table.insert(hexarow, tonumber(el.id, 16))--tonumber(string.format("0x%X", el.id)))
+ --   print("Decimal " .. el.id  .. "   Hexa " .. tonumber(el.id,16))
+    table.insert(hexarow, tonumber(Utils.num2hex(el.id), 16)) --tonumber(string.format("0x%X", el.id)))
   end
   
   return unpack(hexarow)
@@ -82,19 +87,26 @@ function Map:display()
   local grid = MOAIGrid.new()
   grid:initRectGrid(self.tilenx, self.tileny, self.tilewidth, self.tileheight)
   
+  --grid:setRow(3, 0x01, 0x01, 0x02)
+  --grid:setRow(2, 0x02, 0x03, 0x01)
+  --grid:setRow(1, 0x03, 0x01, 0x03)
   for y = 1, self.tileny do
-   grid:setRow(self.tileny - (y - 1), getHexRow(self.data[y]))
+    print(getHexRow(self.data[y]))
+    grid:setRow(self.tileny - (y - 1), getHexRow(self.data[y]))
   end
  
   
   local mapTiles = MOAITileDeck2D.new()
   mapTiles:setTexture("tilesheet.png")
-  mapTiles:setSize(self.tilenx, self.tileny)
+  
+  local sx = self.tileset.imagewidth / self.tileset.tilewidth
+  local sy = self.tileset.imageheight / self.tileset.tileheight
+  mapTiles:setSize(sx, sy)
   
   local prop = MOAIProp2D.new()
   prop:setDeck(mapTiles)
   prop:setGrid(grid)
-  prop:setLoc(-400, -300)
+  prop:setLoc(-400, -600)
   
   -- Miiiiine
   self.grid = grid
