@@ -1,6 +1,6 @@
 
 local stateMgr = require("modules.GameStateMgr")
-local BaseState = require("gamestates.templateState")
+local BaseState = require("gamestates.playState")
 
 -- ==================================
 --    Window

@@ -3,8 +3,8 @@ return {
   luaversion = "5.1",
   tiledversion = "2015-06-05",
   orientation = "orthogonal",
-  width = 4,
-  height = 4,
+  width = 10,
+  height = 10,
   tilewidth = 32,
   tileheight = 32,
   nextobjectid = 1,
@@ -28,6 +28,12 @@ return {
       terrains = {},
       tilecount = 72,
       tiles = {
+        {
+          id = 0,
+          properties = {
+            ["collide"] = "1"
+          }
+        },
         {
           id = 4,
           properties = {
@@ -61,17 +67,23 @@ return {
       name = "Tile Layer 1",
       x = 0,
       y = 0,
-      width = 4,
-      height = 4,
+      width = 10,
+      height = 10,
       visible = true,
       opacity = 1,
       properties = {},
       encoding = "lua",
       data = {
-        20, 5, 6, 10,
-        8, 17, 18, 10,
-        8, 7, 20, 10,
-        10, 10, 10, 10
+        20, 5, 6, 10, 8, 8, 8, 8, 8, 8,
+        8, 17, 18, 10, 8, 8, 8, 8, 8, 8,
+        8, 7, 20, 10, 8, 8, 8, 8, 8, 8,
+        10, 10, 10, 10, 8, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 1, 1,
+        1, 1, 1, 1, 8, 8, 8, 8, 1, 8,
+        8, 8, 8, 1, 1, 8, 8, 8, 1, 8,
+        8, 8, 8, 8, 1, 8, 8, 8, 1, 8,
+        8, 8, 8, 8, 1, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8
       }
     }
   }

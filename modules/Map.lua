@@ -36,12 +36,12 @@ function Map:importMap( mapname )
   self.tiles = {}
   for i = 1, self.tileset.tilecount do
     local tile = {}
-    tile.id = i
+    tile.id = i 
     
     tile.properties = {}
     
     for _, v in ipairs(self.tileset.tiles) do
-      if v.id == i then
+      if v.id == i - 1 then
         tile.properties = v.properties
       end     
     end
@@ -159,6 +159,37 @@ function Map:drawDebug()
   
   return prop
 
+end
+
+function Map:initCollisions(world)
+  local tiles = self.data
+  
+  self.bodies = {}
+  for y = 1, self.tileny do
+    for x = 1, self.tilenx do
+        local tile = tiles[y][x]
+        
+        if tile.properties["collide"] ~= nil then
+            -- add a box2D rectangle
+           local floorBody = world:addBody( MOAIBox2DBody.STATIC )
+           
+           
+           -- Be careful, origin of a body is in its center
+           -- origin of prop is top left corner.
+           local locx = (x * self.tilewidth) - 400 - 0.5 * self.tilewidth  --  - demi width - demiwidth of tile
+           local locy = -(y * self.tilewidth) + 300 + 0.5 * self.tileheight
+           print("creating body at " .. locx  .. "  " .. locy)
+           floorBody:setTransform(locx, locy)
+           local floorFixture = floorBody:addRect(-0.5 * self.tilewidth, 0.5 * self.tileheight, 0.5 * self.tilewidth, -0.5 * self.tileheight)   
+           
+           table.insert(self.bodies, floorBody)
+        end
+        
+    end
+  end
+  
+    
+  
 end
 
 
